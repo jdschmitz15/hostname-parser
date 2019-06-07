@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/csv"
-	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -124,26 +123,29 @@ func (reg *regex) load(data [][]string) {
 }
 
 func main() {
-	var parsefile, hostfile string
+	//var parsefile, hostfile string
 
-	parse := flag.String("parse", "parse-table.csv", "Enter the parse csv")
-	names := flag.String("names", "hostname.csv", "Enter the hostname csv")
-	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "usage:  --parse <parser file> --names <hostname file>\r\n")
-		fmt.Fprintf(os.Stderr, "default:  parse: 'parse-table.csv' \r\n")
-		fmt.Fprintf(os.Stderr, "default:  names: 'hostname.csv' \r\n")
-	}
-	flag.Parse()
+	// parse := flag.String("parse", "parser-table.csv", "Enter the parse csv")
+	// names := flag.String("names", "hostname.csv", "Enter the hostname csv")
+	// flag.Usage = func() {
+	// 	fmt.Fprintf(os.Stderr, "usage:  --parse <parser file> --names <hostname file>\r\n")
+	// 	fmt.Fprintf(os.Stderr, "default:  parse: 'parser-table.csv' \r\n")
+	// 	fmt.Fprintf(os.Stderr, "default:  names: 'hostname.csv' \r\n")
+	// }
+	// flag.Parse()
 
-	//fmt.Println(*parse)
-	if *parse != "" {
-		parsefile = *parse
-	}
-	if *names != "" {
-		hostfile = *names
-	}
-	parserec := ReadCSV(parsefile)
-	hostrec := ReadCSV(hostfile)
+	// //fmt.Println(*parse)
+	// if *parse != "" {
+	// 	parsefile = *parse
+	// }
+	// if *names != "" {
+	// 	hostfile = *names
+	// }
+
+	config, _ := parseConfig()
+
+	parserec := ReadCSV(config.Parser.parserfile)
+	hostrec := ReadCSV(config.Parser.samplehosts)
 
 	var data regex
 	data.load(parserec)
