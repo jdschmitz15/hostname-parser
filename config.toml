@@ -1,11 +1,29 @@
 [illumio]
-fqdn = "jds-vspshere3.poc.segmentationpov.com"
+fqdn = "jds-aws.poc.segmentationpov.com"
+#fqdn = "jds-vsphere3.poc.segmentationpov.com"
 port = 8443 # Integer (no quotes).
 org = 1 # Integer (no quotes). Value is 1 for on-prem PCE installations.
-user = "api_16f3a187a6c3bde44"
-key = "48667baa2c2ac2a95e3d76c5b4ced658c177d175062766c263b8dd71d60949da"
+# user = "api_16f3a187a6c3bde44"
+# key = "48667baa2c2ac2a95e3d76c5b4ced658c177d175062766c263b8dd71d60949da"
+user = "api_1a5a544ba0030405e"
+key = "79660bad382c1c6c7400801ca76ff30753f387fae150236722b1e84a70e70ae1"
 match_field = "host_name" # Matches to ServniceNow match_field. Must either be "host_name" or "name".
 
 [parser]
-parserfile = parser-table.csv
-samplehosts = hostname.csv
+parserfile = "parser-table.csv"
+#autoupdate = true
+#useapi = true
+outputfile = "output.csv"
+
+
+[labelMatch]
+role="default"
+app="default"
+env="default"
+#loc="default"
+
+[logging]
+log_only = false # True will make no changes to PCE. Log will reflect what will be updated if set to false.
+log_directory = "" # Blank value stores log in same folder where tool is run.
+log_file = "Illumio_Parser.log"
+ 

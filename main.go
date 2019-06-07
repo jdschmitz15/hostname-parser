@@ -8,6 +8,9 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
+
+	"github.com/brian1917/illumioapi"
 )
 
 type regex struct {
@@ -98,58 +101,95 @@ func (reg *regex) load(data [][]string) {
 		//ignore header
 		if c != 0 {
 			var r regexstruct
-			var tempcglabels [][]string
-			var tempprecglabels, temppostcglabels []string
+			// var tempcglabels [][]string
+			// var tempprecglabels, temppostcglabels []string
+
+			//Array order 0-LOC,1-ENV,2-APP,3-APP
 			for x := 0; x < 4; x++ {
 
 				match := re.FindStringSubmatch(row[x+1])
 				//fmt.Println(match)
+
+				//Check if the match criteria
 				if len(match) > 0 {
-					tempcglabels = append(tempcglabels, strings.Split(match[3], ","))
-					tempprecglabels = append(tempprecglabels, match[1])
-					temppostcglabels = append(temppostcglabels, match[5])
+					r.cglist = append(r.cglist, strings.Split(match[3], ","))
+					r.precgtxt = append(r.precgtxt, match[1])
+					r.postcgtxt = append(r.postcgtxt, match[5])
+				} else {
+					fmt.Printf("parser CSV has incorrect format in row %d and column %d", c, x)
+					os.Exit(1)
 				}
 			}
-			r.precgtxt = tempprecglabels
-			r.postcgtxt = temppostcglabels
 			r.regex = row[0]
-			r.cglist = tempcglabels
+
+			// r.precgtxt = tempprecglabels
+			// r.postcgtxt = temppostcglabels
+			// r.cglist = tempcglabels
 
 			regex = append(regex, r)
 		}
 		reg.regexdata = regex
 	}
-	//fmt.Println(r)
+	//fmt.Printf("%+v", reg)
 }
 
 func main() {
-	//var parsefile, hostfile string
 
-	// parse := flag.String("parse", "parser-table.csv", "Enter the parse csv")
-	// names := flag.String("names", "hostname.csv", "Enter the hostname csv")
-	// flag.Usage = func() {
-	// 	fmt.Fprintf(os.Stderr, "usage:  --parse <parser file> --names <hostname file>\r\n")
-	// 	fmt.Fprintf(os.Stderr, "default:  parse: 'parser-table.csv' \r\n")
-	// 	fmt.Fprintf(os.Stderr, "default:  names: 'hostname.csv' \r\n")
+	config, pce := parseConfig()
+
+	if len(config.Logging.LogDirectory) > 0 && config.Logging.LogDirectory[len(config.Logging.LogDirectory)-1:] != string(os.PathSeparator) {
+		config.Logging.LogDirectory = config.Logging.LogDirectory + string(os.PathSeparator)
+	}
+	var logfile string
+	if config.Logging.LogFile == "" {
+		logfile = config.Logging.LogDirectory + "Illumio_Parser_Output_" + time.Now().Format("20060102_150405") + ".log"
+	} else {
+		logfile = config.Logging.LogFile
+	}
+	f, err := os.OpenFile(logfile, os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+	log.SetOutput(f)
+
+	// LOG THE MODE
+	log.Printf("INFO - Log only mode set to %t \r\n", config.Logging.LogOnly)
+
+	// labelsAPI, apiResp, err := illumioapi.GetAllLabels(pce)
+	// fmt.Println(labelsAPI, apiResp, err)
+	// if config.Logging.verbose == true {
+	// 	log.Printf("DEBUG - Get All Labels API HTTP Request: %s %v \r\n", apiResp.Request.Method, apiResp.Request.URL)
+	// 	log.Printf("DEBUG - Get All Labels API HTTP Reqest Header: %v \r\n", apiResp.Request.Header)
+	// 	log.Printf("DEBUG - Get All Labels API Response Status Code: %d \r\n", apiResp.StatusCode)
+	// 	log.Printf("DEBUG - Get All Labels API Response Body: \r\n %s \r\n", apiResp.RespBody)
 	// }
-	// flag.Parse()
-
-	// //fmt.Println(*parse)
-	// if *parse != "" {
-	// 	parsefile = *parse
-	// }
-	// if *names != "" {
-	// 	hostfile = *names
+	// if err != nil {
+	// 	log.Fatal(err)
 	// }
 
-	config, _ := parseConfig()
+	workloads, apiResp, err := illumioapi.GetAllWorkloads(pce)
+	fmt.Println(workloads, apiResp, err)
+	if config.Logging.verbose == true {
+		log.Printf("DEBUG - Get All Labels API HTTP Request: %s %v \r\n", apiResp.Request.Method, apiResp.Request.URL)
+		log.Printf("DEBUG - Get All Labels API HTTP Reqest Header: %v \r\n", apiResp.Request.Header)
+		log.Printf("DEBUG - Get All Labels API Response Status Code: %d \r\n", apiResp.StatusCode)
+		log.Printf("DEBUG - Get All Labels API Response Body: \r\n %s \r\n", apiResp.RespBody)
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	parserec := ReadCSV(config.Parser.parserfile)
-	hostrec := ReadCSV(config.Parser.samplehosts)
+	parserec := ReadCSV(config.Parser.Parserfile)
+
+	hostrec := ReadCSV(config.Parser.HostnameFile)
 
 	var data regex
 	data.load(parserec)
 	for _, x := range hostrec {
 		fmt.Println(data.ParseHostname(x[0]))
 	}
+	re := regexp.MustCompile(`E1(D)(1)(2)(3)(S)(S)(1)(7)(0)`)
+	fmt.Println(re.FindStringSubmatch("E1D123SS170"))
+	fmt.Println(re.ReplaceAllString("E1D123SS170", "$"))
 }
