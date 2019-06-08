@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"io/ioutil"
 	"log"
 
@@ -108,6 +107,6 @@ func parseConfig() (config, illumioapi.PCE) {
 		config.Parser.AutoUpdate = auto
 	}
 
-	fmt.Printf("%+v", config)
+	//fmt.Printf("%+v", config)
 	return config, pce
 }
