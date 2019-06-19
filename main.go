@@ -362,7 +362,7 @@ func main() {
 	//Read the Regex Parsing CSV.   Format should be match Regex and replace regex per label {}
 	parserec := ReadCSV(conf.Parser.Parserfile)
 	if conf.Logging.verbose == true {
-		log.Printf("DEBUG - Open parser file \r\n")
+		log.Printf("DEBUG - Open parser file - %s\r\n", conf.Parser.Parserfile)
 	}
 
 	var data regex

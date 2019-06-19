@@ -50,14 +50,15 @@ type logging struct {
 }
 
 var configFile, hostFile, outputFile string
-var debugLogging, api, noprompt bool
+var logonly, debugLogging, api, noprompt bool
 
 func init() {
 	flag.StringVar(&configFile, "config", "config.toml", "Location of TOML configuration file")
 	flag.BoolVar(&debugLogging, "v", false, "Set for verbose logging.")
 	flag.BoolVar(&noprompt, "noprompt", false, "Set to automate label updates on PCE.")
 	flag.StringVar(&hostFile, "hostfile", "", "Location of hostnames CSV to parse")
-	flag.StringVar(&outputFile, "outputfile", "", "Location of hostnames CSV to parse")
+	flag.StringVar(&outputFile, "outputfile", "", "Location of output hostnames CSV")
+	flag.BoolVar(&logonly, "logonly", false, "Set to only Log changes.  Dont update the PCE")
 
 }
 
@@ -105,7 +106,10 @@ func parseConfig() (config, illumioapi.PCE) {
 		config.Parser.NoPrompt = true
 
 	}
+	if logonly {
+		config.Logging.LogOnly = true
 
+	}
 	// if config.Parser.OutputFile != "" {
 	// 	config.Parser.NoPrompt = false
 	// }
