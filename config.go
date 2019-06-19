@@ -2,40 +2,44 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 
 	"github.com/BurntSushi/toml"
 	"github.com/brian1917/illumioapi"
 )
 
 type config struct {
-	Illumio    illumio    `toml:"illumio"`
-	Parser     parser     `toml:"parser"`
-	LabelMatch labelMatch `toml:"labelMatch"`
-	Logging    logging    `toml:"logging"`
+	Illumio illumio `toml:"illumio"`
+	Parser  parser  `toml:"parser"`
+	Match   match   `toml:"match"`
+	Logging logging `toml:"logging"`
 }
 
 type illumio struct {
-	FQDN       string `toml:"fqdn"`
-	Port       int    `toml:"port"`
-	Org        int    `toml:"org"`
-	User       string `toml:"user"`
-	Key        string `toml:"key"`
-	MatchField string `toml:"match_field"`
+	FQDN string `toml:"fqdn"`
+	Port int    `toml:"port"`
+	Org  int    `toml:"org"`
+	User string `toml:"user"`
+	Key  string `toml:"key"`
+	//	MatchField string `toml:"match_field"`
+	NoPCE bool `toml:"no_pce"`
 }
 
 type parser struct {
 	Parserfile   string `toml:"parserfile"`
 	HostnameFile string `toml:"hostnamefile"`
 	OutputFile   string `toml:"outputfile"`
-	UseApi       bool   `toml:"useapi"`
-	AutoUpdate   bool   `toml:"autoupdate"`
+	NoPrompt     bool   `toml:"noprompt"`
 }
-type labelMatch struct {
+type match struct {
+	AllEmpty    bool   `toml:"allempty"`
+	IgnoreMatch bool   `toml:"ignorematch"`
 	App         string `toml:"app"`
-	Enviornment string `toml:"env"`
-	Location    string `toml:"loc"`
+	Env         string `toml:"env"`
+	Loc         string `toml:"loc"`
 	Role        string `toml:"role"`
 }
 type logging struct {
@@ -46,14 +50,13 @@ type logging struct {
 }
 
 var configFile, hostFile, outputFile string
-var debugLogging, api, auto bool
+var debugLogging, api, noprompt bool
 
 func init() {
 	flag.StringVar(&configFile, "config", "config.toml", "Location of TOML configuration file")
 	flag.BoolVar(&debugLogging, "v", false, "Set for verbose logging.")
-	flag.BoolVar(&api, "api", false, "Set to pull hostnames from PCE.")
-	flag.BoolVar(&auto, "auto", false, "Set to automate label updates on PCE.")
-	flag.StringVar(&hostFile, "hostfile", "hostname.csv", "Location of hostnames CSV to parse")
+	flag.BoolVar(&noprompt, "noprompt", false, "Set to automate label updates on PCE.")
+	flag.StringVar(&hostFile, "hostfile", "", "Location of hostnames CSV to parse")
 	flag.StringVar(&outputFile, "outputfile", "", "Location of hostnames CSV to parse")
 
 }
@@ -74,13 +77,13 @@ func parseConfig() (config, illumioapi.PCE) {
 	}
 
 	// IF A FIELD IS LEFT BLANK WE WANT TO PUT A PLACEHOLDER
-	fields := []*string{&config.LabelMatch.App, &config.LabelMatch.Enviornment, &config.LabelMatch.Location, &config.LabelMatch.Role}
-	for _, field := range fields {
-		if *field == "" {
-			*field = "csvPlaceHolderIllumio"
-		}
+	//fields := []*string{&config.LabelMatch.App, &config.LabelMatch.Env, &config.LabelMatch.Loc, &config.LabelMatch.Role}
+	// for _, field := range fields {
+	// 	if *field == "" {
+	// 		*field = "csvPlaceHolderIllumio"
+	// 	}
 
-	}
+	// }
 
 	pce := illumioapi.PCE{
 		FQDN: config.Illumio.FQDN,
@@ -97,16 +100,21 @@ func parseConfig() (config, illumioapi.PCE) {
 		config.Parser.HostnameFile = hostFile
 	}
 
-	// Override toml weather to Pull Hostnames from PCE or not
-	if api && !config.Parser.UseApi {
-		config.Parser.UseApi = api
-	}
-
 	// Pull Hostnames from PCE
-	if auto && !config.Parser.AutoUpdate {
-		config.Parser.AutoUpdate = auto
+	if noprompt {
+		config.Parser.NoPrompt = true
+
 	}
 
+	// if config.Parser.OutputFile != "" {
+	// 	config.Parser.NoPrompt = false
+	// }
+
+	if config.Illumio.NoPCE && config.Parser.HostnameFile == "" {
+		fmt.Printf("\r\nYou must use the CLI -hostfile option or configure HostfileName in the config file when not using PCE Data(no_pce=true)....r\n")
+		os.Exit(1)
+	}
 	//fmt.Printf("%+v", config)
 	return config, pce
+
 }
