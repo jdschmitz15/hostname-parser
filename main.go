@@ -253,40 +253,31 @@ func matchworkloads(labels []*illumioapi.Label) bool {
 	} else if len(labels) != emptylabels(&conf.Match) { //if # labels of the workload <> labels configured in ConfigFile then return false
 		return false
 		//Check to see if all the labels match by checking all the labels in ConfigFile agaist labels on the workload
+		//return false if any label is NOT a match. AND I STILL HATE BRIAN P.
 	} else {
-		match := 1
 		for _, l := range labels {
 
 			switch l.Key {
 			case "loc":
-				if l.Value == conf.Match.Loc {
-					match = match * 1
-				} else {
-					match = match * 0
+				if l.Value != conf.Match.Loc {
+					return false
 				}
 			case "env":
 				if l.Value == conf.Match.Env {
-					match = match * 1
-				} else {
-					match = match * 0
+					return false
 				}
 			case "app":
 				if l.Value == conf.Match.App {
-					match = match * 1
-				} else {
-					match = match * 0
+					return false
 				}
 			case "role":
 				if l.Value == conf.Match.Role {
-					match = match * 1
-				} else {
-					match = match * 0
+					return false
 				}
 			}
 		}
-		return !(match == 0)
+		return true
 	}
-	//return if match = 0 or 1 as boolean
 
 }
 
