@@ -15,6 +15,7 @@ parserfile = "parser-table.csv"
 #noprompt = true
 #hostnamefile="hostname.csv"
 outputfile = "output.csv"
+#checkcase=2
 
 [match]
 ignorematch=true

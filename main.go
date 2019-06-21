@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/csv"
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -63,25 +62,22 @@ func ReadCSV(file string) [][]string {
 // createLabels
 func createLabels(pce illumioapi.PCE, tmplabel illumioapi.Label) illumioapi.Label {
 
-	var label illumioapi.Label
-
-	_, newLabel, err := illumioapi.CreateLabel(pce, tmplabel)
+	newLabel, apiResp, err := illumioapi.CreateLabel(pce, tmplabel)
 
 	if conf.Logging.verbose == true {
 		log.Printf("DEBUG - Exact label does not exist for %s (%s). Creating new label... \r\n", tmplabel.Value, tmplabel.Key)
-		log.Printf("DEBUG - Create Label API HTTP Request: %s %v \r\n", newLabel.Request.Method, newLabel.Request.URL)
-		log.Printf("DEBUG - Create Label API HTTP Reqest Header: %+v \r\n", newLabel.Request.Header)
+		log.Printf("DEBUG - Create Label API HTTP Request: %s %v \r\n", apiResp.Request.Method, apiResp.Request.URL)
+		log.Printf("DEBUG - Create Label API HTTP Reqest Header: %+v \r\n", apiResp.Request.Header)
 		log.Printf("DEBUG - Create Label API HTTP Reqest Body: %+v \r\n", tmplabel)
-		log.Printf("DEBUG - Create Label API for %s (%s) Response Status Code: %d \r\n", tmplabel.Value, tmplabel.Key, newLabel.StatusCode)
-		log.Printf("DEBUG - Create Label API for %s (%s) Response Body: %s \r\n", tmplabel.Value, tmplabel.Key, newLabel.RespBody)
+		log.Printf("DEBUG - Create Label API for %s (%s) Response Status Code: %d \r\n", tmplabel.Value, tmplabel.Key, apiResp.StatusCode)
+		log.Printf("DEBUG - Create Label API for %s (%s) Response Body: %s \r\n", tmplabel.Value, tmplabel.Key, apiResp.RespBody)
 	}
 	if err != nil {
 		log.Printf("ERROR - %s", err)
 	}
-	json.Unmarshal([]byte(newLabel.RespBody), &label)
-	log.Printf("INFO - CREATED LABEL %s (%s) with following HREF: %s", label.Value, label.Key, label.Href)
+	log.Printf("INFO - CREATED LABEL %s (%s) with following HREF: %s", newLabel.Value, newLabel.Key, newLabel.Href)
 
-	return label
+	return newLabel
 }
 
 // RelabelFromHostname function - Regex method to provide labels for the hostname provided
@@ -121,8 +117,8 @@ func (r *regex) RelabelFromHostname(wkld illumioapi.Workload, lbls map[string]st
 
 				var tmplabels []*illumioapi.Label
 				for _, label := range []string{"loc", "env", "app", "role"} {
-					//get the string returned from the replace regex.
-					tmpstr := strings.Trim(tmpre.ReplaceAllString(tmpwkld.Hostname, tmp.labelcg[label]), " ")
+					//get the string returned from the replace regex and update the case if needed.
+					tmpstr := updatecase(strings.Trim(tmpre.ReplaceAllString(tmpwkld.Hostname, tmp.labelcg[label]), " "))
 
 					var tmplabel illumioapi.Label
 
@@ -319,6 +315,21 @@ func labelhref(labels []*illumioapi.Label) (string, string, string, string) {
 	return rolehref, apphref, envhref, lochref
 }
 
+//upperorlower function check to see if user set capitalization to ignore/no change(0 default), upper (1) or lower (2)
+func updatecase(str string) string {
+
+	switch conf.Parser.CheckCase {
+	case 0:
+		return str
+	case 1:
+		return strings.ToUpper(str)
+	case 2:
+		return strings.ToLower(str)
+	default:
+		return str
+	}
+}
+
 var pce illumioapi.PCE
 var conf config
 
@@ -383,7 +394,7 @@ func main() {
 		}
 		//create Label array with all the HRefs as value with label type and label key combined as the key "key.value"
 		for _, l := range labels {
-			lbls[l.Key+"."+l.Value] = l.Href
+			lbls[l.Key+"."+updatecase(l.Value)] = l.Href
 		}
 		if conf.Logging.verbose == true {
 			log.Printf("DEBUG - Build Map of HREFs with a key that uses a label's type and value eg. 'type.value': %v \r\n", lbls)
@@ -473,31 +484,44 @@ func main() {
 	// }
 	// Skip over printing the label table if no labels are needed to be created
 
-	//fmt.Println(conf.Logging.LogOnly, conf.Illumio.NoPCE)
+	//Print out labels that are not on the PCE and ask if you should create.  Just ignore
+	var response string
 	if len(nolabels) > 0 {
 
 		for keylabel := range nolabels {
 			key, value := strings.Split(keylabel, ".")[0], strings.Split(keylabel, ".")[1]
-			labeltable.Append([]string{key, value})
-			//Make sure we arent only looking for an output file and we have the ability to access the PCE.
-			if !conf.Logging.LogOnly && !conf.Illumio.NoPCE {
-				l := createLabels(pce, illumioapi.Label{Key: key, Value: value})
-				lbls[key+"."+value] = l.Href
-				//tmplabel.Href = l.Href
+
+			if !conf.Parser.NoPrompt {
+				//make the table struct and display
+				labeltable.Append([]string{key, value})
+				labeltable.Render()
+				//Ask if you want to update PCE with new Labels
+				fmt.Print("**** Parsing the hostname provided these labels.  Do you want to update the Labels and Workloads(yes/no)? ")
+				fmt.Scanln(&response)
+
+				//Check if response=yes and its not Log only or noPCE - create labels
+				if response == "yes" && (!conf.Logging.LogOnly && !conf.Illumio.NoPCE) {
+					l := createLabels(pce, illumioapi.Label{Key: key, Value: value})
+					lbls[key+"."+value] = l.Href
+				}
+
+				fmt.Print("***** Above ***** All Labels discovered ***** \r\n")
+			} else {
+
+				//Check if response=yes and its not Log only or noPCE - create labels
+				if !conf.Logging.LogOnly && !conf.Illumio.NoPCE {
+					l := createLabels(pce, illumioapi.Label{Key: key, Value: value})
+					lbls[key+"."+value] = l.Href
+				}
 			}
 
 		}
-		if conf.Logging.verbose && !conf.Parser.NoPrompt {
-			labeltable.Render()
-			fmt.Print("***** Above ***** All Labels discovered ***** \r\n")
 
-		}
 	}
 
-	var response string
 	// Print table with all the workloads and the new labels.
 	if len(alllabeledwrkld) > 0 {
-		if conf.Logging.verbose && !conf.Parser.NoPrompt {
+		if !conf.Parser.NoPrompt {
 			matchtable.Render()
 		}
 
@@ -519,7 +543,7 @@ func main() {
 				log.Printf("DEBUG - Both LogOnly is set to false and NoPCE is set to false - Creating Labels\r\n")
 
 			}
-
+			// If you Create workloads we need to come back through all the workloads and update the HRefs for new Labels.
 			for _, w := range alllabeledwrkld {
 				for _, l := range w.Labels {
 					if l.Href == "" {
@@ -527,6 +551,8 @@ func main() {
 					}
 				}
 			}
+
+			//Update workloads with updated or new labels
 			apiResp, err := illumioapi.BulkWorkload(pce, alllabeledwrkld, "update")
 			//fmt.Println(apiResp, err)
 			for _, api := range apiResp {

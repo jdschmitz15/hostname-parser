@@ -1,0 +1,106 @@
+2019/06/21 09:14:13 INFO - Log only mode set to false 
+2019/06/21 09:14:13 INFO - Illumio and Log Settings NoPCE:false {LogOnly:false LogDirectory: LogFile: verbose:false}
+2019/06/21 09:14:14 ----------Check for Match--------
+2019/06/21 09:14:14 N1SUP1TS11 - Match? false - Using Regex: (dc)-(\w*)(\d+)
+2019/06/21 09:14:14 N1SUP1TS11 - Match? false - Using Regex: (dc)--(\w*)(\d+)
+2019/06/21 09:14:14 N1SUP1TS11 - Match? false - Using Regex: (h)(\d+)-(\w*)-([ds])(\d+)
+2019/06/21 09:14:14 N1SUP1TS11 - Match? true - Using Regex: ([EN].)([SW])([A-Z]{2})(\d)([A-Z]{2})\d+
+2019/06/21 09:14:14 N1SUP1TS11 - Replacement Regex: map[role:$5  app:$3  env:$2$2 loc:$1 ] - Labels: TS - UP - SS - N1
+2019/06/21 09:14:14 N1SUP1TS11 - Current Labels: , , ,  Replaced with: TS, UP, SS, N1
+2019/06/21 09:14:14 ----------Check for Match--------
+2019/06/21 09:14:14 E1ICOGTS11 - Match? false - Using Regex: (dc)-(\w*)(\d+)
+2019/06/21 09:14:14 E1ICOGTS11 - Match? false - Using Regex: (dc)--(\w*)(\d+)
+2019/06/21 09:14:14 E1ICOGTS11 - Match? false - Using Regex: (h)(\d+)-(\w*)-([ds])(\d+)
+2019/06/21 09:14:14 E1ICOGTS11 - Match? false - Using Regex: ([EN].)([SW])([A-Z]{2})(\d)([A-Z]{2})\d+
+2019/06/21 09:14:14 E1ICOGTS11 - Match? true - Using Regex: ([EN].)([IM])([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 E1ICOGTS11 - Replacement Regex: map[env:INFRA loc:$1  role:$4  app:$3 ] - Labels: TS - COG - INFRA - E1
+2019/06/21 09:14:14 E1ICOGTS11 - Current Labels: , , ,  Replaced with: TS, COG, INFRA, E1
+2019/06/21 09:14:14 ----------Check for Match--------
+2019/06/21 09:14:14 E1WUP2TS11 - Match? false - Using Regex: (dc)-(\w*)(\d+)
+2019/06/21 09:14:14 E1WUP2TS11 - Match? false - Using Regex: (dc)--(\w*)(\d+)
+2019/06/21 09:14:14 E1WUP2TS11 - Match? false - Using Regex: (h)(\d+)-(\w*)-([ds])(\d+)
+2019/06/21 09:14:14 E1WUP2TS11 - Match? true - Using Regex: ([EN].)([SW])([A-Z]{2})(\d)([A-Z]{2})\d+
+2019/06/21 09:14:14 E1WUP2TS11 - Replacement Regex: map[role:$5  app:$3  env:$2$2 loc:$1 ] - Labels: TS - UP - WW - E1
+2019/06/21 09:14:14 E1WUP2TS11 - Current Labels: , , ,  Replaced with: TS, UP, WW, E1
+2019/06/21 09:14:14 ----------Check for Match--------
+2019/06/21 09:14:14 E1D123SS11 - Match? false - Using Regex: (dc)-(\w*)(\d+)
+2019/06/21 09:14:14 E1D123SS11 - Match? false - Using Regex: (dc)--(\w*)(\d+)
+2019/06/21 09:14:14 E1D123SS11 - Match? false - Using Regex: (h)(\d+)-(\w*)-([ds])(\d+)
+2019/06/21 09:14:14 E1D123SS11 - Match? false - Using Regex: ([EN].)([SW])([A-Z]{2})(\d)([A-Z]{2})\d+
+2019/06/21 09:14:14 E1D123SS11 - Match? false - Using Regex: ([EN].)([IM])([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 E1D123SS11 - Match? false - Using Regex: ([EN].)([M])([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 E1D123SS11 - Match? false - Using Regex: (DR)(\d{2})(S)([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 E1D123SS11 - Match? false - Using Regex: (D)(\d{2})(P)([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 E1D123SS11 - Match? false - Using Regex: (D)(\d{2})([A-Z]{2})(\d{2})([A-Z]{2})\d+
+2019/06/21 09:14:14 E1D123SS11 - Match? false - Using Regex: ([A-Za-z0-9]*)(\.)([A-Za-z0-9]*)(\.)([A-Za-z0-9]*)\.\w+
+2019/06/21 09:14:14 E1D123SS11 - Match? false - Using Regex: (DV)(\d)(WS)(\d{2})(SSIS)
+2019/06/21 09:14:14 E1D123SS11 - Match? false - Using Regex: (DV)(\d)(WS)(\d{2})(SSO)
+2019/06/21 09:14:14 E1D123SS11 - Match? false - Using Regex: (\w*)\.(\w*)
+2019/06/21 09:14:14 ----------Check for Match--------
+2019/06/21 09:14:14 E3MMSDAD11 - Match? false - Using Regex: (dc)-(\w*)(\d+)
+2019/06/21 09:14:14 E3MMSDAD11 - Match? false - Using Regex: (dc)--(\w*)(\d+)
+2019/06/21 09:14:14 E3MMSDAD11 - Match? false - Using Regex: (h)(\d+)-(\w*)-([ds])(\d+)
+2019/06/21 09:14:14 E3MMSDAD11 - Match? false - Using Regex: ([EN].)([SW])([A-Z]{2})(\d)([A-Z]{2})\d+
+2019/06/21 09:14:14 E3MMSDAD11 - Match? true - Using Regex: ([EN].)([IM])([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 E3MMSDAD11 - Replacement Regex: map[role:$4  app:$3  env:INFRA loc:$1 ] - Labels: AD - MSD - INFRA - E3
+2019/06/21 09:14:14 E3MMSDAD11 - Current Labels: , , ,  Replaced with: AD, MSD, INFRA, E3
+2019/06/21 09:14:14 ----------Check for Match--------
+2019/06/21 09:14:14 D12UP01HB01 - Match? false - Using Regex: (dc)-(\w*)(\d+)
+2019/06/21 09:14:14 D12UP01HB01 - Match? false - Using Regex: (dc)--(\w*)(\d+)
+2019/06/21 09:14:14 D12UP01HB01 - Match? false - Using Regex: (h)(\d+)-(\w*)-([ds])(\d+)
+2019/06/21 09:14:14 D12UP01HB01 - Match? false - Using Regex: ([EN].)([SW])([A-Z]{2})(\d)([A-Z]{2})\d+
+2019/06/21 09:14:14 D12UP01HB01 - Match? false - Using Regex: ([EN].)([IM])([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 D12UP01HB01 - Match? false - Using Regex: ([EN].)([M])([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 D12UP01HB01 - Match? false - Using Regex: (DR)(\d{2})(S)([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 D12UP01HB01 - Match? false - Using Regex: (D)(\d{2})(P)([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 D12UP01HB01 - Match? true - Using Regex: (D)(\d{2})([A-Z]{2})(\d{2})([A-Z]{2})\d+
+2019/06/21 09:14:14 D12UP01HB01 - Replacement Regex: map[role:$5  app:$3  env:$4  loc:$1$2] - Labels: HB - UP - 01 - D12
+2019/06/21 09:14:14 D12UP01HB01 - Current Labels: , , ,  Replaced with: HB, UP, 01, D12
+2019/06/21 09:14:14 ----------Check for Match--------
+2019/06/21 09:14:14 D00PGITAP01 - Match? false - Using Regex: (dc)-(\w*)(\d+)
+2019/06/21 09:14:14 D00PGITAP01 - Match? false - Using Regex: (dc)--(\w*)(\d+)
+2019/06/21 09:14:14 D00PGITAP01 - Match? false - Using Regex: (h)(\d+)-(\w*)-([ds])(\d+)
+2019/06/21 09:14:14 D00PGITAP01 - Match? false - Using Regex: ([EN].)([SW])([A-Z]{2})(\d)([A-Z]{2})\d+
+2019/06/21 09:14:14 D00PGITAP01 - Match? false - Using Regex: ([EN].)([IM])([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 D00PGITAP01 - Match? false - Using Regex: ([EN].)([M])([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 D00PGITAP01 - Match? false - Using Regex: (DR)(\d{2})(S)([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 D00PGITAP01 - Match? true - Using Regex: (D)(\d{2})(P)([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 D00PGITAP01 - Replacement Regex: map[loc:$1$2 role:$5  app:$4  env:$3 ] - Labels: AP - GIT - P - D00
+2019/06/21 09:14:14 D00PGITAP01 - Current Labels: , , ,  Replaced with: AP, GIT, P, D00
+2019/06/21 09:14:14 ----------Check for Match--------
+2019/06/21 09:14:14 DR42SGITDB12 - Match? false - Using Regex: (dc)-(\w*)(\d+)
+2019/06/21 09:14:14 DR42SGITDB12 - Match? false - Using Regex: (dc)--(\w*)(\d+)
+2019/06/21 09:14:14 DR42SGITDB12 - Match? false - Using Regex: (h)(\d+)-(\w*)-([ds])(\d+)
+2019/06/21 09:14:14 DR42SGITDB12 - Match? false - Using Regex: ([EN].)([SW])([A-Z]{2})(\d)([A-Z]{2})\d+
+2019/06/21 09:14:14 DR42SGITDB12 - Match? false - Using Regex: ([EN].)([IM])([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 DR42SGITDB12 - Match? false - Using Regex: ([EN].)([M])([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 DR42SGITDB12 - Match? true - Using Regex: (DR)(\d{2})(S)([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 DR42SGITDB12 - Replacement Regex: map[role:$5  app:$4  env:$2$2 loc:$1$2-TEST] - Labels: DB - GIT - 4242 - DR42-TEST
+2019/06/21 09:14:14 DR42SGITDB12 - Current Labels: , , ,  Replaced with: DB, GIT, 4242, DR42-TEST
+2019/06/21 09:14:14 ----------Check for Match--------
+2019/06/21 09:14:14 DV1WS16SSIS - Match? false - Using Regex: (dc)-(\w*)(\d+)
+2019/06/21 09:14:14 DV1WS16SSIS - Match? false - Using Regex: (dc)--(\w*)(\d+)
+2019/06/21 09:14:14 DV1WS16SSIS - Match? false - Using Regex: (h)(\d+)-(\w*)-([ds])(\d+)
+2019/06/21 09:14:14 DV1WS16SSIS - Match? false - Using Regex: ([EN].)([SW])([A-Z]{2})(\d)([A-Z]{2})\d+
+2019/06/21 09:14:14 DV1WS16SSIS - Match? false - Using Regex: ([EN].)([IM])([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 DV1WS16SSIS - Match? false - Using Regex: ([EN].)([M])([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 DV1WS16SSIS - Match? false - Using Regex: (DR)(\d{2})(S)([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 DV1WS16SSIS - Match? false - Using Regex: (D)(\d{2})(P)([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 DV1WS16SSIS - Match? false - Using Regex: (D)(\d{2})([A-Z]{2})(\d{2})([A-Z]{2})\d+
+2019/06/21 09:14:14 DV1WS16SSIS - Match? false - Using Regex: ([A-Za-z0-9]*)(\.)([A-Za-z0-9]*)(\.)([A-Za-z0-9]*)\.\w+
+2019/06/21 09:14:14 DV1WS16SSIS - Match? true - Using Regex: (DV)(\d)(WS)(\d{2})(SSIS)
+2019/06/21 09:14:14 DV1WS16SSIS - Replacement Regex: map[role:DATABASE app:APP-$5 env:$1-DEV loc:WAP] - Labels: DATABASE - APP-SSIS - DV-DEV - WAP
+2019/06/21 09:14:14 DV1WS16SSIS - Current Labels: , , ,  Replaced with: DATABASE, APP-SSIS, DV-DEV, WAP
+2019/06/21 09:14:14 ----------Check for Match--------
+2019/06/21 09:14:14 App.dev.cisco.com - Match? false - Using Regex: (dc)-(\w*)(\d+)
+2019/06/21 09:14:14 App.dev.cisco.com - Match? false - Using Regex: (dc)--(\w*)(\d+)
+2019/06/21 09:14:14 App.dev.cisco.com - Match? false - Using Regex: (h)(\d+)-(\w*)-([ds])(\d+)
+2019/06/21 09:14:14 App.dev.cisco.com - Match? false - Using Regex: ([EN].)([SW])([A-Z]{2})(\d)([A-Z]{2})\d+
+2019/06/21 09:14:14 App.dev.cisco.com - Match? false - Using Regex: ([EN].)([IM])([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 App.dev.cisco.com - Match? false - Using Regex: ([EN].)([M])([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 App.dev.cisco.com - Match? false - Using Regex: (DR)(\d{2})(S)([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 App.dev.cisco.com - Match? false - Using Regex: (D)(\d{2})(P)([A-Z]{3})([A-Z]{2})\d+
+2019/06/21 09:14:14 App.dev.cisco.com - Match? false - Using Regex: (D)(\d{2})([A-Z]{2})(\d{2})([A-Z]{2})\d+
+2019/06/21 09:14:14 App.dev.cisco.com - Match? true - Using Regex: ([A-Za-z0-9]*)(\.)([A-Za-z0-9]*)(\.)([A-Za-z0-9]*)\.\w+
+2019/06/21 09:14:14 App.dev.cisco.com - Replacement Regex: map[role: app:$1  env:$3  loc:Cisco] - Labels:  - App - dev - Cisco
+2019/06/21 09:14:14 App.dev.cisco.com - Current Labels: , , ,  Replaced with: , App, dev, Cisco

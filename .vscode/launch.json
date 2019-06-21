@@ -6,13 +6,40 @@
     "configurations": [
 
         {
-            "name": "launch",
+            "name": "logonly-verbose-lower",
             "type": "go",
             "request": "launch",
             "mode": "auto",
             "program": "${fileDirname}",
             "env": {},
-            "args": ["-v","-logonly"]
+            "args": ["-v","-logonly","-checkcase=2"]
+        },
+        {
+            "name": "logonly-verbose-upper",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${fileDirname}",
+            "env": {},
+            "args": ["-v","-logonly","-checkcase=1"]
+        },
+        {
+            "name": "logonly-verbose-unchanged",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${fileDirname}",
+            "env": {},
+            "args": ["-v","-logonly","-checkcase=0"]
+        },
+        {
+            "name": "upper-hostfile",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${fileDirname}",
+            "env": {},
+            "args": ["-checkcase=0","-hostfile=hostname.csv"]
         }
     ]
 }

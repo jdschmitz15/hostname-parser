@@ -33,6 +33,7 @@ type parser struct {
 	HostnameFile string `toml:"hostnamefile"`
 	OutputFile   string `toml:"outputfile"`
 	NoPrompt     bool   `toml:"noprompt"`
+	CheckCase    int    `toml:"checkcase"`
 }
 type match struct {
 	AllEmpty    bool   `toml:"allempty"`
@@ -51,6 +52,7 @@ type logging struct {
 
 var configFile, hostFile, outputFile string
 var logonly, debugLogging, api, noprompt bool
+var checkcase int
 
 func init() {
 	flag.StringVar(&configFile, "config", "config.toml", "Location of TOML configuration file")
@@ -59,6 +61,7 @@ func init() {
 	flag.StringVar(&hostFile, "hostfile", "", "Location of hostnames CSV to parse")
 	flag.StringVar(&outputFile, "outputfile", "", "Location of output hostnames CSV")
 	flag.BoolVar(&logonly, "logonly", false, "Set to only Log changes.  Dont update the PCE")
+	flag.IntVar(&checkcase, "checkcase", 1, "Set case of label value. (ignore=0, uppercase=1, lowercase=2)")
 
 }
 
@@ -109,6 +112,15 @@ func parseConfig() (config, illumioapi.PCE) {
 	if logonly {
 		config.Logging.LogOnly = true
 
+	}
+	//Check if user set Checkcase(change case of label value) to ignore case=0, make uppercase=1, make lowercase=2
+	switch checkcase {
+	case 0:
+		config.Parser.CheckCase = 0
+	case 1:
+		config.Parser.CheckCase = 1
+	case 2:
+		config.Parser.CheckCase = 2
 	}
 	// if config.Parser.OutputFile != "" {
 	// 	config.Parser.NoPrompt = false
